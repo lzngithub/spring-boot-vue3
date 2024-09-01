@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.CategoryMapper">
+    <resultMap id="CategoryResultMap" type="com.example.demo.pojo.Category">
+        <id property="id" column="id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="categoryAlias" column="category_alias"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <insert id="add" parameterType="com.example.demo.pojo.Category">
+        insert into category(category_name, category_alias, create_user, update_time, create_time) values (#{categoryName}, #{categoryAlias}, #{createUser}, now(), now())
+    </insert>
+    <update id="edit">
+        update category set category_name = #{categoryName}, category_alias = #{categoryAlias}, update_time = now()
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </update>
+    <select id="list" resultType="com.example.demo.pojo.Category"  resultMap="CategoryResultMap">
+        SELECT * FROM category
+        <where>
+            <if test="categoryName != null">
+                and category_name = #{categoryName}
+            </if>
+            <if test="categoryAlias != null">
+                and category_alias = #{categoryAlias}
+            </if>
+        </where>
+    </select>
+    <select id="detail" resultType="com.example.demo.pojo.Category">
+        SELECT * FROM category
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </select>
+</mapper>

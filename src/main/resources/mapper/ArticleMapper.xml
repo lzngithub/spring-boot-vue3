@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ArticleMapper">
+    <resultMap id="ArticleResultMap" type="com.example.demo.pojo.Article">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="coverImg" column="cover_img"/>
+        <result property="status" column="status"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <insert id="add" parameterType="com.example.demo.pojo.Article">
+        insert into article(title, content, cover_img, status, category_id, create_user, update_time, create_time) values (#{title}, #{content}, #{coverImg}, #{status}, #{categoryId}, #{createUser}, now(), now())
+    </insert>
+    <delete id="delete">
+        DELETE FROM article
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </delete>
+    <select id="list" resultType="com.example.demo.pojo.Article"  resultMap="ArticleResultMap">
+        SELECT * FROM article
+        <where>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+        <if test="currentPage != null and pageSize != null">
+            LIMIT #{pageSize} OFFSET #{offset}
+        </if>
+    </select>
+    <select id="detail" resultType="com.example.demo.pojo.Article" resultMap="ArticleResultMap">
+        SELECT * FROM article
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM article
+    </select>
+    <update id="edit">
+        update article set title = #{title}, content = #{content}, cover_img = #{coverImg},
+        status = #{status}, category_id = #{categoryId}, update_time = now()
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </update>
+</mapper>

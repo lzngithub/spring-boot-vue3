@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.UserMapper">
+    <resultMap id="UserResultMap" type="com.example.demo.pojo.User">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="nickname" column="nickname"/>
+        <result property="email" column="email"/>
+        <result property="avatar" column="avatar"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <select id="findByUserName" parameterType="string" resultType="com.example.demo.pojo.User" resultMap="UserResultMap">
+        SELECT * FROM user
+        <where>
+            <if test="username != null">
+                and username = #{username}
+            </if>
+        </where>
+    </select>
+    <insert id="add" parameterType="com.example.demo.pojo.User">
+        insert into user(username, password, update_time, create_time) values (#{username}, #{password}, now(), now())
+    </insert>
+    <update id="updateData">
+        update user set nickname = #{nickname}, email = #{email}, update_time = now()
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </update>
+    <update id="updateAvatar">
+        update user set avatar = #{avatar}, update_time = now()
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </update>
+    <update id="updatePwd">
+        update user set password = #{password}, update_time = now()
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </update>
+</mapper>
